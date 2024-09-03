@@ -21,12 +21,21 @@ class HashObjectCommand {
         if(this.flag & this.flag==='-w') {
             const folder = hash.slice(0, 2);
             const file = hash.slice(2);
-            const completpath = path.join(process.cwd(), '.git', 'objects',folder);
-            if(!fs.existsSync(completpath)) {
-                fs.mkdirSync(completpath)
+            const completePath = path.join(
+                process.cwd(), 
+                '.git', 
+                'objects',
+                folder
+            );
+
+            if (!fs.existsSync(completePath)) {
+                fs.mkdirSync(completePath, { recursive: true });
+            }
+            if(!fs.existsSync(completePath)) {
+                fs.mkdirSync(completePath)
             }
             const compressedData = zlib.deflateSync(blob);
-            fs.writeFileSync(path.join(completpath, file),compressedData);
+            fs.writeFileSync(path.join(completePath, file),compressedData);
         }
         process.stdout.write(hash);
     }
